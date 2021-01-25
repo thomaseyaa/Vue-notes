@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Notes</title>
+  <link rel="icon" type="image/png" href="img/notes.png"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous"/>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css" integrity="sha384-vp86vTRFVJgpjF9jiIGPEEqYqlDwgyBgEF109VFjmqGmIY/Y4HV4d3Gp2irVfcrp" crossorigin="anonymous">
+</head>
+<body class="bg-light">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-sm-6 mt-5" id="app">
+        <h1 class="text-center mb-4">Notes</h1>
+
+        <form @submit.prevent="addNote">
+          <input type="text" class="form-control" required minlength="5" v-model="note" placeholder="Add a note" v-focus/>
+          <div class="d-grid gap-2">
+            <button type="submit" class="btn btn-primary text-white mt-3" :disabled="!note.trim()">Add note</button>
+          </div>
+        </form>
+
+        <p class="text-center text-muted mt-5" v-if="!notes.length">No notes.</p>
+
+        <div v-else>
+          <ul class="list-group mt-5">
+            <li class="list-group-item list-group-item-primary text-center"><strong>{{ notes.length }}</strong> {{ notes.length == 1 ? 'note' : 'notes' }}</li>
+            <li v-for="note in notes" :key="note.id" class="list-group-item d-flex justify-content-between align-items-center">
+              <label v-if="!editing">{{note.content}}</label>
+              <form v-bind:value="newNote" @change="editedNote()" v-else @submit.prevent="editNote(note.id)">
+                <input type="text" class="form-control hidden" required minlength="5" v-model="note.content"/>
+              </form>
+              <div>
+                <span>{{ note.content.length }} characters</span>
+                <button @click.prevent="editNote(note.id)" class="btn btn-light btn-sm m-1"><i class="fas fa-pen"></i></button>
+                <button @click.prevent="deleteNote(note.id)" class="btn btn-light btn-sm"><i class="fas fa-trash"></i></button>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+<script defer src="https://unpkg.com/vue@next"></script>
+<script defer src="js/app.js"></script>
+</html>
